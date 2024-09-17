@@ -9,7 +9,7 @@ class Task:
         """Convertir l'objet Task en JSON"""
         return {
             "id": self.id,
-            'title': self.title,
-            'description': self.description,
-            'completed': self.completed
+            "title": self.title,
+            "description": self.description,
+            "completed": self.completed,
         }
