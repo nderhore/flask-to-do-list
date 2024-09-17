@@ -1,0 +1,22 @@
+
+### GET request to example server
+GET http://localhost:5000/api/task
+
+###
+
+### POST request to create task
+POST http://localhost:5000/api/task
+Content-Type: application/json
+
+{
+  "title": "unTitre",
+  "description": "une description",
+  "id": 1
+}
+###
+
+### DELETE request to example server
+DELETE http://localhost:5000/api/tasks/1
+
+###
+

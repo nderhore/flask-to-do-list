@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+</head>
+<body>
+<h1>Ma liste de tâches</h1>
+<form id="add-task-form">
+    <input type="text" id="title" placeholder="Titre de la tache" required>
+    <input type="text" id="description" placeholder="Description de la tache" required>
+    <button type="submit">Ajouter</button>
+</form>
+<script src="{{ url_for('static',filename='js/tasks.js')}}"></script>
+</body>
+</html>
