@@ -17,8 +17,8 @@ Avant de commencer, assurez-vous d'avoir installé les éléments suivants :
 1. **Cloner le dépôt**
 
    ```bash
-   git clone https://github.com/votre-utilisateur/votre-projet.git
-   cd votre-projet
+   git clone https://github.com/nderhore/flask-to-do-list.git
+   cd flask-to-do-list
    ```
 
 2. **Créer un environnement virtuel**
