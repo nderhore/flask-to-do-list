@@ -1,9 +1,14 @@
-class Task:
-    def __init__(self, id, title, description):
-        self.id = id
-        self.title = title
-        self.description = description
-        self.completed = False
+from sqlalchemy import Column, Boolean, String, Integer
+from src.config.database import  db
+
+
+class Task(db.Model):
+
+    __tablename__ = 'task'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=False)
+    completed = db.Column(db.Boolean, default=False)
 
     def to_dict(self):
         """Convertir l'objet Task en JSON"""
