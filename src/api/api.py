@@ -1,47 +1,58 @@
 from flask import Blueprint, jsonify, request
-
+from src.config.database import db
 from src.model.Task import Task
 
 # créer ma route
 api_bp = Blueprint("api", __name__)
 
-# initialisation de la liste
-task_list = []
-
 
 # route pour avoir une tache
 @api_bp.route("/task", methods=["GET"])
 def get_tasks():
-    return jsonify([task.to_dict() for task in task_list])
+    tasks = Task.query.all()
+    return jsonify([task.to_dict() for task in tasks])
+
+@api_bp.route("/task/<int:task_id>", methods=["GET"])
+def get_task_by_id(task_id : int):
+    task = Task.query.get(task_id)
+    if not task:
+        return jsonify({'error': 'Tâche non trouvée.'}),404
+    return jsonify(task.to_dict()),200
 
 
 @api_bp.route("/task", methods=["POST"])
 def create_task():
     data = request.get_json()
+    if not data:
+        return jsonify({'error': 'objet vide.'}),400
     new_task: Task = Task(
-        id=data.get("id"), title=data.get("title"), description=data.get("description")
+        title=data.get("title"), description=data.get("description")
     )
-    task_list.append(new_task)
+    db.session.add(new_task)
+    db.session.commit()
     return jsonify(new_task.to_dict()), 201
 
 
 @api_bp.route("/task/<int:task_id>", methods=["DELETE"])
 def delete_task(task_id):
-    # 1. rechercher la task dans le tableau
-    for task in task_list:
-        if task.id == task_id:
-            task_list.remove(task)
-            return jsonify({"message": "task deleted"}), 200
-    return jsonify({"message": "task not found"}), 404
+    # 1. rechercher la task dans la bdd
+    task = Task.query.get(task_id)
+    if not task:
+        return jsonify({'error': 'Tâche non trouvée.'}),404
+    db.session.delete(task)
+    db.session.commit()
+    return jsonify({"message": "task deleted"}), 200
 
 
 @api_bp.route("/task/<int:task_id>", methods=["PUT"])
 def update_task(task_id):
     # 1. recuperer la data
+    task = Task.query.get(task_id)
+    if not task:
+        return jsonify({'error': 'Tâche non trouvée.'}), 404
     data = request.get_json()
-    for task in task_list:
-        if task.id == task_id:
-            task.title = data.get("title")
-            task.description = data.get("description")
-            task.completed = data.get("completed")
-        return jsonify({"message": "task not found"}), 404
+    task.title = data.get("title")
+    task.description = data.get("description")
+    task.completed = data.get("completed")
+    db.session.commit()
+    return jsonify(task.to_dict()), 404
